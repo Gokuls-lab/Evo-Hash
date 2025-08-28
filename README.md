@@ -53,8 +53,8 @@ This approach removes the need for salts, simplifies architecture, and adds an A
 1. **Clone the repository**
 
    ```bash
-   git clone https://github.com/yourusername/evo-hash.git
-   cd evo-hash
+   git clone https://github.com/Gokuls-lab/Evo-Hash.git
+   cd Evo-Hash
    ```
 
 2. **Create virtual environment & install dependencies**
