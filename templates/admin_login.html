@@ -1,0 +1,396 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Admin Portal - Secure Access</title>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" rel="stylesheet">
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+            background: linear-gradient(135deg, #1e3a8a 0%, #3730a3 50%, #581c87 100%);
+            min-height: 100vh;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            padding: 20px;
+            position: relative;
+            overflow: hidden;
+        }
+
+        body::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background: url('data:image/svg+xml,<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 100 100"><defs><pattern id="grid" width="10" height="10" patternUnits="userSpaceOnUse"><path d="M 10 0 L 0 0 0 10" fill="none" stroke="%23ffffff" stroke-width="0.5" opacity="0.1"/></pattern></defs><rect width="100" height="100" fill="url(%23grid)"/></svg>') repeat;
+            pointer-events: none;
+        }
+
+        .container {
+            background: rgba(255, 255, 255, 0.95);
+            backdrop-filter: blur(20px);
+            border: 1px solid rgba(255, 255, 255, 0.2);
+            padding: 3rem 2.5rem;
+            border-radius: 24px;
+            box-shadow: 0 25px 50px rgba(0, 0, 0, 0.2), 0 0 0 1px rgba(255, 255, 255, 0.1);
+            width: 100%;
+            max-width: 420px;
+            position: relative;
+            animation: slideUp 0.6s ease-out;
+        }
+
+        @keyframes slideUp {
+            from {
+                opacity: 0;
+                transform: translateY(30px);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        .header {
+            text-align: center;
+            margin-bottom: 2.5rem;
+        }
+
+        .logo {
+            width: 70px;
+            height: 70px;
+            background: linear-gradient(135deg, #dc2626, #991b1b);
+            border-radius: 20px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            margin: 0 auto 1.5rem;
+            box-shadow: 0 10px 20px rgba(220, 38, 38, 0.4);
+            position: relative;
+        }
+
+        .logo::before {
+            content: '';
+            position: absolute;
+            top: -2px;
+            left: -2px;
+            right: -2px;
+            bottom: -2px;
+            background: linear-gradient(45deg, #dc2626, #991b1b, #7c2d12);
+            border-radius: 22px;
+            z-index: -1;
+            animation: pulse 2s ease-in-out infinite alternate;
+        }
+
+        @keyframes pulse {
+            0% {
+                box-shadow: 0 0 0 0 rgba(220, 38, 38, 0.4);
+            }
+            100% {
+                box-shadow: 0 0 0 10px rgba(220, 38, 38, 0);
+            }
+        }
+
+        .logo i {
+            color: white;
+            font-size: 28px;
+        }
+
+        h1 {
+            color: #1a1a1a;
+            font-size: 2rem;
+            font-weight: 700;
+            margin-bottom: 0.5rem;
+            letter-spacing: -0.02em;
+        }
+
+        .subtitle {
+            color: #6b7280;
+            font-size: 1rem;
+            font-weight: 400;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 8px;
+        }
+
+        .security-badge {
+            background: linear-gradient(135deg, #fef3c7, #fde68a);
+            color: #92400e;
+            padding: 4px 8px;
+            border-radius: 6px;
+            font-size: 12px;
+            font-weight: 600;
+            border: 1px solid #f59e0b;
+        }
+
+        .form-group {
+            margin-bottom: 1.5rem;
+            position: relative;
+        }
+
+        .input-container {
+            position: relative;
+        }
+
+        .input-icon {
+            position: absolute;
+            left: 16px;
+            top: 50%;
+            transform: translateY(-50%);
+            color: #9ca3af;
+            font-size: 16px;
+            z-index: 2;
+            transition: color 0.3s ease;
+        }
+
+        input[type="text"], input[type="password"] {
+            width: 100%;
+            padding: 16px 16px 16px 48px;
+            border: 2px solid #e5e7eb;
+            border-radius: 12px;
+            font-size: 16px;
+            font-weight: 400;
+            background: #fafafa;
+            transition: all 0.3s ease;
+            outline: none;
+        }
+
+        input[type="text"]:focus, input[type="password"]:focus {
+            border-color: #dc2626;
+            background: #ffffff;
+            box-shadow: 0 0 0 4px rgba(220, 38, 38, 0.1);
+        }
+
+        input[type="text"]:focus + .input-icon,
+        input[type="password"]:focus + .input-icon {
+            color: #dc2626;
+        }
+
+        .floating-label {
+            position: absolute;
+            left: 48px;
+            top: 50%;
+            transform: translateY(-50%);
+            color: #9ca3af;
+            font-size: 16px;
+            font-weight: 400;
+            pointer-events: none;
+            transition: all 0.3s ease;
+            background: transparent;
+            padding: 0 4px;
+        }
+
+        input:focus + .floating-label,
+        input:not(:placeholder-shown) + .floating-label {
+            top: 0;
+            left: 44px;
+            font-size: 12px;
+            font-weight: 500;
+            color: #dc2626;
+            background: #ffffff;
+        }
+
+        .admin-btn {
+            width: 100%;
+            padding: 16px;
+            background: linear-gradient(135deg, #dc2626 0%, #991b1b 100%);
+            color: white;
+            border: none;
+            border-radius: 12px;
+            font-size: 16px;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            position: relative;
+            overflow: hidden;
+            margin-bottom: 1.5rem;
+        }
+
+        .admin-btn:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 12px 24px rgba(220, 38, 38, 0.4);
+        }
+
+        .admin-btn:active {
+            transform: translateY(0);
+        }
+
+        .admin-btn::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: -100%;
+            width: 100%;
+            height: 100%;
+            background: linear-gradient(90deg, transparent, rgba(255, 255, 255, 0.2), transparent);
+            transition: left 0.5s;
+        }
+
+        .admin-btn:hover::before {
+            left: 100%;
+        }
+
+        .error {
+            background: linear-gradient(135deg, #fee2e2, #fecaca);
+            color: #dc2626;
+            padding: 12px 16px;
+            border-radius: 8px;
+            margin-bottom: 1.5rem;
+            font-size: 14px;
+            font-weight: 500;
+            border-left: 4px solid #dc2626;
+            animation: shake 0.5s ease-in-out;
+        }
+
+        @keyframes shake {
+            0%, 100% { transform: translateX(0); }
+            25% { transform: translateX(-5px); }
+            75% { transform: translateX(5px); }
+        }
+
+        .security-notice {
+            background: linear-gradient(135deg, #fef3c7, #fde68a);
+            border: 1px solid #f59e0b;
+            border-radius: 8px;
+            padding: 12px;
+            margin-bottom: 1.5rem;
+            font-size: 13px;
+            color: #92400e;
+            text-align: center;
+        }
+
+        .security-notice i {
+            margin-right: 6px;
+        }
+
+        @media (max-width: 480px) {
+            .container {
+                padding: 2rem 1.5rem;
+                margin: 1rem;
+            }
+            
+            h1 {
+                font-size: 1.75rem;
+            }
+        }
+
+        .loading {
+            display: none;
+            width: 20px;
+            height: 20px;
+            border: 2px solid rgba(255, 255, 255, 0.3);
+            border-radius: 50%;
+            border-top-color: white;
+            animation: spin 1s ease-in-out infinite;
+            margin-right: 8px;
+        }
+
+        @keyframes spin {
+            to { transform: rotate(360deg); }
+        }
+
+        .footer {
+            text-align: center;
+            margin-top: 2rem;
+            padding-top: 1.5rem;
+            border-top: 1px solid #e5e7eb;
+            color: #6b7280;
+            font-size: 12px;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <div class="header">
+            <div class="logo">
+                <i class="fas fa-shield-halved"></i>
+            </div>
+            <h1>Admin Portal</h1>
+            <p class="subtitle">
+                <i class="fas fa-lock"></i>
+                Secure Access Required
+                <span class="security-badge">PROTECTED</span>
+            </p>
+        </div>
+        
+        <div class="security-notice">
+            <i class="fas fa-exclamation-triangle"></i>
+            <strong>Authorized Personnel Only</strong><br>
+            All access attempts are logged and monitored.
+        </div>
+        
+        {% if error %}
+            <div class="error">
+                <i class="fas fa-exclamation-triangle"></i> {{ error }}
+            </div>
+        {% endif %}
+        
+        <form action="/admin/login" method="post" id="adminForm">
+            <div class="form-group">
+                <div class="input-container">
+                    <i class="fas fa-user-shield input-icon"></i>
+                    <input type="text" id="username" name="username" placeholder=" " required>
+                    <label class="floating-label" for="username">Admin Username</label>
+                </div>
+            </div>
+            
+            <div class="form-group">
+                <div class="input-container">
+                    <i class="fas fa-key input-icon"></i>
+                    <input type="password" id="password" name="password" placeholder=" " required>
+                    <label class="floating-label" for="password">Admin Password</label>
+                </div>
+            </div>
+            
+            <button type="submit" class="admin-btn">
+                <div class="loading"></div>
+                <span><i class="fas fa-sign-in-alt"></i> Access Admin Panel</span>
+            </button>
+        </form>
+        
+        <div class="footer">
+            <i class="fas fa-clock"></i> Session timeout: 30 minutes<br>
+            <i class="fas fa-server"></i> Secure connection established
+        </div>
+    </div>
+
+    <script>
+        document.getElementById('adminForm').addEventListener('submit', function(e) {
+            const button = this.querySelector('.admin-btn');
+            const loading = button.querySelector('.loading');
+            const span = button.querySelector('span');
+            
+            loading.style.display = 'inline-block';
+            span.innerHTML = '<i class="fas fa-spinner fa-spin"></i> Authenticating...';
+            button.disabled = true;
+        });
+
+        // Add some security-focused interactions
+        let failedAttempts = 0;
+        document.getElementById('adminForm').addEventListener('submit', function(e) {
+            // This would be handled server-side in a real application
+            const username = document.getElementById('username').value;
+            const password = document.getElementById('password').value;
+            
+            if (!username || !password) {
+                e.preventDefault();
+                failedAttempts++;
+                
+                if (failedAttempts >= 3) {
+                    alert('Multiple failed attempts detected. Please contact system administrator.');
+                }
+            }
+        });
+    </script>
+</body>
+</html>

@@ -1,0 +1,7 @@
+fastapi
+uvicorn
+SQLAlchemy
+Jinja2
+argon2-cffi
+python-multipart
+neat-python
